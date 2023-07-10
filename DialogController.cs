@@ -6,6 +6,7 @@ public class DialogController : MonoBehaviour
 {
     public GameObject cube1;
     public GameObject cube2;
+    public GameObject camera1;
     public Animator animator1;
     public Animator animator2;
     public AudioClip talk1;
@@ -15,13 +16,15 @@ public class DialogController : MonoBehaviour
 
     public CubeSpeech cube1Speech;
     public CubeSpeech cube2Speech;
-    int rand;
+    public int rand;
+    public float dist;
 
     // Start is called before the first frame update
     void Start()
     {
         cube1 = GameObject.Find("Cubecs");
         cube2 = GameObject.Find("CubecsClone");
+        camera1 = GameObject.Find("Main Camera");
         animator1 = cube1.GetComponentInChildren<Animator>();
         animator2 = cube2.GetComponentInChildren<Animator>();
         talk1 = Resources.Load<AudioClip>("Talk1");
@@ -42,7 +45,8 @@ public class DialogController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown("space")){
+        dist = Vector3.Distance(cube1.transform.position, cube2.transform.position);
+        if (Input.GetKeyDown("space") || dist < 3){
             rand = Random.Range(1, 3);
             if (rand == 1){
                 cube1Speech.numOfConvers = 1;
@@ -66,6 +70,24 @@ public class DialogController : MonoBehaviour
             animator1.SetInteger("Trig", 1);
             rand = 1;
         }
+
+        if (Input.GetKey("up")){
+            //cube1.transform.position += new Vector3(0, 0, 0.01f);
+            camera1.transform.position += new Vector3(0, 0, 0.1f);
+        } 
+        if (Input.GetKey("down")){
+            //cube1.transform.position += new Vector3(0, 0, -0.01f);
+            camera1.transform.position += new Vector3(0, 0, -0.1f);
+        } 
+        if (Input.GetKey("left")){
+            //cube1.transform.position += new Vector3(-0.01f, 0, 0);
+            camera1.transform.position += new Vector3(-0.1f, 0, 0);
+        } 
+        if (Input.GetKey("right")){
+            //cube1.transform.position += new Vector3(0.01f, 0, 0);
+            camera1.transform.position += new Vector3(0.1f, 0, 0);
+        }
+
     }
 
 
