@@ -1,50 +1,49 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class Speech : MonoBehaviour
 {
+
     public AudioSource audioSource;
-    public Animator animator;
+    public DialogSystem _dialogueSystemScript;
+    Animator anim;
+    public bool IsAdded = false;
+    public bool IsTalk = false;
+    public bool isMoving = false;
 
-    public List<AudioClip> currentDialog1st = new List<AudioClip>();
-    public List<AudioClip> currentDialog2nd = new List<AudioClip>();
-    public List<AudioClip> actualDialog = new List<AudioClip>();
-    
-
-
-
-
-    // Start is called before the first frame update
     void Start()
     {
         audioSource = GetComponent<AudioSource>();
-        animator = GetComponent<Animator>();
-        
-        
-        
-
+        _dialogueSystemScript = GameObject.Find("Plane").GetComponent<DialogSystem>();
+        anim = GetComponent<Animator>();
+        IsAdded = false;
+        isMoving = true;
+        this.GetComponent<Animator>().SetTrigger("IsWalk");
     }
-    
 
-    // Update is called once per frame
-    void Update()
+    private void Update()
     {
+        if (isMoving && this.transform.parent.rotation == Quaternion.Euler(0f, 180f, 0f))
+        {
+            this.transform.parent.position += new Vector3(0f, 0f, -0.01f);
 
-
+        }
+        if (isMoving && this.transform.parent.rotation == Quaternion.Euler(0f, 0f, 0f))
+        {
+            this.transform.parent.position += new Vector3(0f, 0f, 0.01f);
+        }
     }
 
-    public void StartSound()
+    public void PlaySoundSpeech()
     {
         audioSource.Play();
     }
 
-    public void StopSound()
+    public void StopSoundSpeech()
     {
         audioSource.Stop();
+        anim.SetInteger("Trig", 0);
     }
 
-    
 }
